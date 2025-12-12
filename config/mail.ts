@@ -9,9 +9,9 @@ const mailConfig = defineConfig({
    * each using a different transport or same transport with different
    * options.
    */
-  replyTo: {
+  from: {
     address: "account@mail.pdnode.com",
-    name: "Pdnode Account ",
+    name: "Pdnode Account",
   },
   mailers: {
     resend: transports.resend({
