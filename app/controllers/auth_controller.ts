@@ -2,9 +2,14 @@ import User from "#models/user";
 import { sendEmailCodeValidator } from "#validators/auth";
 import type { HttpContext } from "@adonisjs/core/http";
 import mail from "@adonisjs/mail/services/main";
+import redis from '@adonisjs/redis/services/main'
 
 export default class AuthController {
-    async sendEmailCode({ request, response, session }: HttpContext) {
+    async sendEmailCode({ request, response }: HttpContext) {
+
+        // return response.json({ status: "succ_email_send" });
+
+        
         const data = request.all();
         const payload = await sendEmailCodeValidator.validate(data);
 
@@ -19,7 +24,10 @@ export default class AuthController {
 
         const randomCode = Math.floor(Math.random() * (max - min + 1)) + min;
 
-        session.put("user.email.code", randomCode);
+        // 换成redis
+        // session.put("user.email.code", randomCode);
+        // 10分钟
+        await redis.set(`user.email.code:${payload.email}`, randomCode, "EX", 60 * 10)
 
         await mail.sendLater((message) => {
             message
@@ -29,6 +37,6 @@ export default class AuthController {
                 .htmlView("emails/verify_email", { "code": randomCode });
         });
 
-        response.json({ status: "succ_email_send" });
+        return response.json({ status: "succ_email_send" });
     }
 }

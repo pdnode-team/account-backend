@@ -32,6 +32,8 @@ const sessionConfig = defineConfig({
       : undefined,
   },
 
+
+
   /**
    * The store to use. Make sure to validate the environment
    * variable in order to infer the store name without any
@@ -45,6 +47,9 @@ const sessionConfig = defineConfig({
    */
   stores: {
     cookie: stores.cookie(),
+    redis: stores.redis({
+      connection: 'main'
+    })
   },
 });
 

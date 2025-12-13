@@ -2,7 +2,7 @@ import env from '#start/env'
 import app from '@adonisjs/core/services/app'
 import { Secret } from '@adonisjs/core/helpers'
 import { defineConfig } from '@adonisjs/core/http'
-
+import proxyAddr from 'proxy-addr'
 /**
  * The app key is used for encrypting cookies, generating signed URLs,
  * and by the "encryption" module.
@@ -24,6 +24,8 @@ export const http = defineConfig({
    * from anywhere inside your application.
    */
   useAsyncLocalStorage: false,
+
+  trustProxy: proxyAddr.compile('loopback'),
 
   /**
    * Manage cookies configuration. The settings for the session id cookie are
