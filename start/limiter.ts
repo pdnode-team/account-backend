@@ -18,7 +18,7 @@ export const throttle = limiter.define('global', () => {
 
 export const sendEmailCodeThrottle = limiter.define("api:sendEmailCode", (ctx: HttpContext) => {
   return limiter
-    .allowRequests(1)
+    .allowRequests(3)
     .every('1 minute')
     .usingKey(`ip_${ctx.request.ip()}`)
 

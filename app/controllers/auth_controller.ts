@@ -13,9 +13,9 @@ export default class AuthController {
         const data = request.all();
         const payload = await sendEmailCodeValidator.validate(data);
 
-        if (await User.findBy("email", payload.email)) {
+        if (payload.type === "verifyEmail" && await User.findBy("email", payload.email)) {
             response.abort({
-                status: "err_email_already_register",
+                status: "e_email_already_register",
             });
         }
 
@@ -37,6 +37,6 @@ export default class AuthController {
                 .htmlView("emails/verify_email", { "code": randomCode });
         });
 
-        return response.json({ status: "succ_email_send" });
+        return response.json({ status: "s_email_send" });
     }
 }

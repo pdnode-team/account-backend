@@ -1,0 +1,28 @@
+{
+  "banned": {
+    "username": [
+      "admin", "a.dmin", "ad.min", "adm.in", "admi.n",
+      "administrator", "a.dministrator", "ad.ministrator", "adm.inistrator", "admi.nistrator",
+      "mod", "m.od", "mo.d",
+      "moderator", "m.oderator", "mo.derator", "mod.erator", "mode.rator", "moder.ator", "modera.tor", "moderat.or",
+      "system", "s.ystem", "sy.stem", "sys.tem", "syst.em", "syste.m",
+      "root", "r.oot", "ro.ot", "roo.t",
+      "service", "s.ervice", "se.rvice", "ser.vice", "serv.ice", "servi.ce", "servic.e",
+      "op", "o.p",
+      "fuck", "f.uck", "fu.ck", "fuc.k",
+      "sex", "s.ex", "se.x",
+      "porn", "p.orn", "po.rn", "por.n",
+      "bitch", "b.itch", "bi.tch", "bit.ch", "bitc.h",
+      "username", "u.sername", "us.ername", "use.rname", "user.name", "userna.me", "usernam.e",
+      "official", "offi.cial", "offic.ial",
+      "support", "s.upport", "su.pport"
+    ],
+    "nickname": [
+      "管理员", "官方", "系统", "客服", "站长",
+      "色情", "黄色", "操", "屌", "性爱",
+      "毒品", "枪支", "赌博", "诈骗", "转账", "加微信", "QQ群", "支付宝",
+      "av", "gv", "wcnm", "cnm", "nazi",
+      "phone", "email", "tel", "qq", "wechat"
+    ]
+  }
+}

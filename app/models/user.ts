@@ -2,7 +2,8 @@ import { DbAccessTokensProvider } from "@adonisjs/auth/access_tokens";
 import { withAuthFinder } from "@adonisjs/auth/mixins/lucid";
 import { compose } from "@adonisjs/core/helpers";
 import hash from "@adonisjs/core/services/hash";
-import { BaseModel, column } from "@adonisjs/lucid/orm";
+import { BaseModel, beforeCreate, column } from "@adonisjs/lucid/orm";
+import {v4 as uuidv4} from "uuid"
 import { DateTime } from "luxon";
 
 const AuthFinder = withAuthFinder(() => hash.use("scrypt"), {
@@ -12,7 +13,7 @@ const AuthFinder = withAuthFinder(() => hash.use("scrypt"), {
 
 export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
-  declare id: number;
+  declare id: string;
 
   @column()
   declare username: string;
@@ -22,9 +23,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column()
   declare email: string;
-
-  @column()
-  declare isEmailVerified: boolean;
 
   @column({ serializeAs: null })
   declare password: string;
@@ -36,4 +34,12 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null;
 
   static accessTokens = DbAccessTokensProvider.forModel(User);
+
+  @beforeCreate()
+  static generateUuid(user: User){
+    if(!user.id){
+      user.id = uuidv4()
+
+    }
+  }
 }
