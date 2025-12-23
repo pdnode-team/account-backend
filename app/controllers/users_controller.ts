@@ -51,12 +51,12 @@ export default class UsersController {
 
     try {
       await User.create({
-        "username": payload.username,
-        "email": payload.email,
+        "username": payload.username.toLowerCase(),
+        "email": payload.email.toLowerCase(),
         "nickname": payload.nickname || null,
         "password": payload.password,
       });
-      redis.del(`user.email.code:${payload.email}`);
+      redis.del(`user.email.code:${payload.email.toLowerCase()}`);
       
 
     } catch (e: unknown) {

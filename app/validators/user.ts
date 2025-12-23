@@ -21,7 +21,7 @@ const isBannedRule = vine.createRule(
     if (typeof value !== "string") return;
 
     // 2. 归一化：转小写并去掉所有的点
-    const normalized = value.toLowerCase().replace(/\./g, "");
+    const normalized = value.toLowerCase().replace(/[._-]/g, "");
 
     // 3. 从 Meta 获取违禁词列表（如果没传则默认为空数组）
     const bannedList = options.type === "username"
@@ -46,7 +46,7 @@ const isBannedRule = vine.createRule(
 
 export const registerUserValidator = vine.withMetaData<RegistrationMeta>().compile(
   vine.object({
-    username: vine.string().trim().regex(/^[a-zA-Z0-9]+$/).minLength(3)
+    username: vine.string().trim().regex(/^[a-zA-Z0-9._-]+$/).minLength(3)
       .maxLength(12).use(isBannedRule({type: "username"})),
     nickname: vine.string().trim().minLength(3).maxLength(12).use(isBannedRule({type: "nickname"})),
     email: vine.string().trim().email(),
