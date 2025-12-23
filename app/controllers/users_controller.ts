@@ -11,7 +11,7 @@ export default class UsersController {
    */
 
   /* -- TODO --
-  * 1. 添加限速
+  * 
   */
   async index({}: HttpContext) {}
 
@@ -22,20 +22,24 @@ export default class UsersController {
     const data = request.all();
     const payload = await registerUserValidator.validate(data);
     
-    const usernameBannedWords = config.banned.username
-    const nicknameBannedWords = config.banned.nickname
+    const normalizedUsername = payload.username.toLowerCase().replace(/\./g, '');
+    const normalizedNickname = payload.nickname?.toLowerCase().replace(/\./g, '') || '';
+
+
+    const isBanned = config.banned.username.some(word => normalizedUsername.includes(word.toLowerCase()));
+    if (isBanned) return response.badRequest({ status: "e_bad_username" });
     
-    for (const bannedWord of usernameBannedWords){
-      if(payload.username.toLowerCase().replace(/\./g, '').includes(bannedWord.toLowerCase().replace(/\./g, ''))){
-        return response.badRequest({status:"e_bad_username"})
-      }
+    if (normalizedNickname) {
+      const isNickBanned = config.banned.nickname.some(word => normalizedNickname.includes(word.toLowerCase()));
+      if (isNickBanned) return response.badRequest({ status: "e_bad_nickname" });
     }
-    if (payload.nickname){
-      for (const bannedWord of nicknameBannedWords){
-              if(payload.nickname?.toLowerCase().replace(/\./g, '').includes(bannedWord.toLowerCase().replace(/\./g, ''))){
-          return response.badRequest({status:"e_bad_nickname"})
-        }
-      }
+
+    const storedCodeString = await redis.get(`user.email.code:${payload.email}`)
+    const storedCode = storedCodeString ? Number(storedCodeString) : null
+    
+    // 检查验证码是否为空或不匹配
+    if (storedCode === null || payload.emailCode !== storedCode) {
+      return response.badRequest({ status: 'e_wrong_email_code' })
     }
 
 
@@ -48,13 +52,7 @@ export default class UsersController {
       return response.badRequest({ status: "e_username_or_email_existing" });
     }
 
-    const storedCodeString = await redis.get(`user.email.code:${payload.email}`)
-    const storedCode = storedCodeString ? Number(storedCodeString) : null
-    
-    // 检查验证码是否为空或不匹配
-    if (storedCode === null || payload.emailCode !== storedCode) {
-      return response.badRequest({ status: 'e_wrong_email_code' })
-    }
+
 
     try {
       await User.create({
