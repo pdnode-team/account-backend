@@ -50,7 +50,7 @@ export default class UsersController {
 
     try {
       await User.create({
-        "username": payload.username.toLowerCase().replace(/\./g, ''),
+        "username": payload.username,
         "email": payload.email,
         "nickname": payload.nickname || null,
         "password": payload.password,

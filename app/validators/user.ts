@@ -5,6 +5,12 @@ import { FieldContext } from "@vinejs/vine/types";
  * 自定义违禁词规则
  * 逻辑：将当前值归一化（小写、去点）后，检查是否包含 meta 中的违禁词
  */
+
+type RegistrationMeta = {
+  bannedUsernames: string[]
+  bannedNicknames: string[]
+}
+
 const isBannedRule = vine.createRule(
   (
     value: unknown,
@@ -38,7 +44,7 @@ const isBannedRule = vine.createRule(
   },
 );
 
-export const registerUserValidator = vine.compile(
+export const registerUserValidator = vine.withMetaData<RegistrationMeta>().compile(
   vine.object({
     username: vine.string().trim().regex(/^[a-zA-Z0-9]+$/).minLength(3)
       .maxLength(12).use(isBannedRule({type: "username"})),
@@ -47,4 +53,5 @@ export const registerUserValidator = vine.compile(
     password: vine.string().trim().minLength(6).maxLength(24),
     emailCode: vine.number().min(100000).max(999999),
   }),
-);
+)
+
