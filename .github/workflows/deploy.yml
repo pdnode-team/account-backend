@@ -1,0 +1,39 @@
+name: Deploy AdonisJS App
+
+on:
+  push:
+    branches: [ main ]  # 当 main 分支收到推送时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.SSH_PASS }}
+          script: |
+            # 1. 进入目录并拉取代码
+            cd ~/account-dev
+            git pull origin main
+
+            # 2. 安装依赖并构建
+            pnpm install
+            pnpm build
+
+            # 3. 准备生产环境
+            cp .env build/.env
+            cp pdnode.config.json build/pdnode.config.json
+            cd build
+            pnpm install --prod
+
+            # 4. 使用 PM2 平滑重启
+            pm2 restart 0
+            
+            # 保存 PM2 状态，确保服务器重启后自动启动
+            pm2 save
