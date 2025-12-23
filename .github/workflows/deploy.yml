@@ -17,6 +17,7 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.SSH_PASS }}
+          port: 2222
           script: |
             # 1. 进入目录并拉取代码
             cd ~/account-dev
