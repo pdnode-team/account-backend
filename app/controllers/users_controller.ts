@@ -12,7 +12,6 @@ export default class UsersController {
 
   /* -- TODO --
   * 1. 添加限速
-  * 2. 不知道了
   */
   async index({}: HttpContext) {}
 
@@ -24,16 +23,25 @@ export default class UsersController {
     const payload = await registerUserValidator.validate(data);
     
     const usernameBannedWords = config.banned.username
+    const nicknameBannedWords = config.banned.nickname
     
     for (const bannedWord of usernameBannedWords){
       if(payload.username.toLowerCase().replace(/\./g, '').includes(bannedWord.toLowerCase().replace(/\./g, ''))){
         return response.badRequest({status:"e_bad_username"})
       }
     }
+    if (payload.nickname){
+      for (const bannedWord of nicknameBannedWords){
+              if(payload.nickname?.toLowerCase().replace(/\./g, '').includes(bannedWord.toLowerCase().replace(/\./g, ''))){
+          return response.badRequest({status:"e_bad_nickname"})
+        }
+      }
+    }
+
 
     const [userByEmail, userByUsername] = await Promise.all([
       User.findBy("email", payload.email),
-      User.findBy("username", payload.username.toLowerCase().replace(/\./g, '')),
+      User.findBy("username", payload.username),
     ]);
 
     if (userByEmail || userByUsername) {
@@ -76,15 +84,15 @@ export default class UsersController {
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) {}
+  // async show({ params }: HttpContext) {}
 
   /**
    * Edit individual record
    */
-  async edit({ params }: HttpContext) {}
+  // async edit({ params }: HttpContext) {}
 
   /**
    * Delete record
    */
-  async destroy({ params }: HttpContext) {}
+  // async destroy({ params }: HttpContext) {}
 }

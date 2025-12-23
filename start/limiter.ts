@@ -23,3 +23,11 @@ export const sendEmailCodeThrottle = limiter.define("api:sendEmailCode", (ctx: H
     .usingKey(`ip_${ctx.request.ip()}`)
 
 })
+
+export const registerThrottle = limiter.define("api:register", (ctx: HttpContext) => {
+  return limiter
+    .allowRequests(10)
+    .every("1 minute")
+    .blockFor("15 minutes")
+    .usingKey(`ip_${ctx.request.ip()}`)
+})

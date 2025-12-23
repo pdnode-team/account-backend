@@ -9,8 +9,11 @@
 
 import AuthController from "#controllers/auth_controller";
 import router from "@adonisjs/core/services/router";
-import { sendEmailCodeThrottle } from '#start/limiter'
+import { sendEmailCodeThrottle, registerThrottle } from '#start/limiter'
 import UsersController from "#controllers/users_controller";
+// import { middleware } from '#start/kernel'
+
+
 
 router.get("/", async () => {
   return {
@@ -19,4 +22,4 @@ router.get("/", async () => {
 });
 
 router.post("/email/send", [AuthController, "sendEmailCode"]).use(sendEmailCodeThrottle);
-router.post("/register", [UsersController, "store"])
+router.post("/register", [UsersController, "store"]).use(registerThrottle)  
