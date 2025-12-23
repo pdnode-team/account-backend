@@ -19,6 +19,8 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           port: 2222
           script: |
+            export PNPM_HOME="/home/deploy/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
             # 1. 进入目录并拉取代码
             
             cd ~/account-dev
