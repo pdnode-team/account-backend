@@ -20,19 +20,13 @@ export default class UsersController {
    */
   async store({ request, response }: HttpContext) {
     const data = request.all();
-    const payload = await registerUserValidator.validate(data);
+    const payload = await registerUserValidator.validate(data, {
+      meta: {
+        bannedUsernames: config.banned.username,
+        bannedNicknames: config.banned.nickname
+      }
+    });
     
-    const normalizedUsername = payload.username.toLowerCase().replace(/\./g, '');
-    const normalizedNickname = payload.nickname?.toLowerCase().replace(/\./g, '') || '';
-
-
-    const isBanned = config.banned.username.some(word => normalizedUsername.includes(word.toLowerCase()));
-    if (isBanned) return response.badRequest({ status: "e_bad_username" });
-    
-    if (normalizedNickname) {
-      const isNickBanned = config.banned.nickname.some(word => normalizedNickname.includes(word.toLowerCase()));
-      if (isNickBanned) return response.badRequest({ status: "e_bad_nickname" });
-    }
 
     const storedCodeString = await redis.get(`user.email.code:${payload.email}`)
     const storedCode = storedCodeString ? Number(storedCodeString) : null
@@ -56,7 +50,7 @@ export default class UsersController {
 
     try {
       await User.create({
-        "username": payload.username.toLowerCase().replace(/\./g, ''),
+        "username": payload.username,
         "email": payload.email,
         "nickname": payload.nickname || null,
         "password": payload.password,
