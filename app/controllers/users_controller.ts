@@ -43,7 +43,8 @@ export default class UsersController {
     const [userByEmail, userByUsername] = await Promise.all([
       User.findBy("email", email),
       User.query()
-        .whereILike("username", username),
+        .whereILike("username", username)
+        .first()
     ]);
 
     if (userByEmail || userByUsername) {
