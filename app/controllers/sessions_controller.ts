@@ -16,17 +16,20 @@ export default class SessionsController {
     async store({ request, response }: HttpContext) {
       const data = request.all()
       const payload = await createSessionValidator.validate(data)
+      const email = payload.email?.toLowerCase()
+      const username = payload.username?.toLowerCase()
+      const password = payload.password
 
-      if (!payload.email && !payload.username) {
+      if (email && username) {
         return response.badRequest({ message: "Either email or username must be provided.", status: "e_missing_identifier" })
-      }else if (payload.email && payload.username) {
+      }else if (email && username) {
         return response.badRequest({ message: "Provide either email or username, not both.", status: "e_multiple_identifiers" })
       }
 
-      const user = await User.verifyCredentials(payload.email! ?? payload?.username?.toLowerCase(), payload.password)
+      const user = await User.verifyCredentials(email! ?? username, password)
 
       const token = await User.accessTokens.create(user, ["*"],{expiresIn: payload.rememberMe ? "7 days" : "2 hours"})
-
+        
 
       return response.ok({ message: "Session created", status: "s_session_created", token })
 
