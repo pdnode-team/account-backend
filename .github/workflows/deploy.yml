@@ -1,5 +1,8 @@
 name: Deploy AdonisJS App
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ main ]  # 当 main 分支收到推送时触发
@@ -17,10 +20,12 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.SSH_PASS }}
+          port: 2222
           script: |
             export PNPM_HOME="/home/deploy/.local/share/pnpm"
             export PATH="$PNPM_HOME:$PATH"
             # 1. 进入目录并拉取代码
+            
             cd ~/account-dev
             git pull origin main
 
@@ -35,7 +40,7 @@ jobs:
             pnpm install --prod
 
             # 4. 使用 PM2 平滑重启
-            pm2 restart 0
+            pnpx pm2 restart 0
             
             # 保存 PM2 状态，确保服务器重启后自动启动
-            pm2 save
+            pnpx pm2 save
