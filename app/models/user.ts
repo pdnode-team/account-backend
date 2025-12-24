@@ -7,7 +7,7 @@ import {v4 as uuidv4} from "uuid"
 import { DateTime } from "luxon";
 
 const AuthFinder = withAuthFinder(() => hash.use("scrypt"), {
-  uids: ["email"],
+  uids: ["email", "username"],
   passwordColumnName: "password",
 });
 

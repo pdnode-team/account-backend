@@ -31,3 +31,11 @@ export const registerThrottle = limiter.define("api:register", (ctx: HttpContext
     .blockFor("15 minutes")
     .usingKey(`ip_${ctx.request.ip()}`)
 })
+
+export const loginThrottle = limiter.define("api:login", (ctx: HttpContext) => {
+  return limiter
+    .allowRequests(15)
+    .every("1 minute")
+    .blockFor("15 minutes")
+    .usingKey(`ip_${ctx.request.ip()}`)
+})
