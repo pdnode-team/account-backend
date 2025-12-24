@@ -22,7 +22,7 @@ export default class SessionsController {
 
       if (email && username) {
         return response.badRequest({ message: "Either email or username must be provided.", status: "e_missing_identifier" })
-      }else if (email && username) {
+      } else if (email && username) {
         return response.badRequest({ message: "Provide either email or username, not both.", status: "e_multiple_identifiers" })
       }
 
