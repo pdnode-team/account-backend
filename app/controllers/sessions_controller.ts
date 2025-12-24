@@ -26,7 +26,7 @@ export default class SessionsController {
         return response.badRequest({ message: "Provide either email or username, not both.", status: "e_multiple_identifiers" })
       }
 
-      const user = await User.verifyCredentials(email! ?? username, password)
+      const user = await User.verifyCredentials((email ?? username)!, password)
 
       const token = await User.accessTokens.create(user, ["*"],{expiresIn: payload.rememberMe ? "7 days" : "2 hours"})
         
