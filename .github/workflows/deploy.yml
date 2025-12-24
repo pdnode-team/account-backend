@@ -1,5 +1,8 @@
 name: Deploy AdonisJS App
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ main ]  # 当 main 分支收到推送时触发
