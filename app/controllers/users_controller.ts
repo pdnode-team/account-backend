@@ -26,9 +26,12 @@ export default class UsersController {
         bannedNicknames: config.banned.nickname
       }
     });
+
+    const email = payload.email.toLowerCase();
+    const username = payload.username.toLowerCase();
     
 
-    const storedCodeString = await redis.get(`user.email.code:${payload.email}`)
+    const storedCodeString = await redis.get(`user.email.code:${email}`)
     const storedCode = storedCodeString ? Number(storedCodeString) : null
     
     // 检查验证码是否为空或不匹配
@@ -38,9 +41,9 @@ export default class UsersController {
 
 
     const [userByEmail, userByUsername] = await Promise.all([
-      User.findBy("email", payload.email.toLowerCase()),
+      User.findBy("email", email),
       User.query()
-        .whereILike("username", payload.username),
+        .whereILike("username", username),
     ]);
 
     if (userByEmail || userByUsername) {
@@ -51,12 +54,12 @@ export default class UsersController {
 
     try {
       await User.create({
-        "username": payload.username.toLowerCase(),
-        "email": payload.email.toLowerCase(),
+        "username": username,
+        "email": email,
         "nickname": payload.nickname || null,
         "password": payload.password,
       });
-      redis.del(`user.email.code:${payload.email.toLowerCase()}`);
+      redis.del(`user.email.code:${email}`);
       
 
     } catch (e: unknown) {
