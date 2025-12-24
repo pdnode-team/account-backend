@@ -28,7 +28,7 @@ export default class UsersController {
     });
 
     const email = payload.email.toLowerCase();
-    const username = payload.username.toLowerCase();
+    // const username = payload.username.toLowerCase();
     
 
     const storedCodeString = await redis.get(`user.email.code:${email}`)
@@ -43,7 +43,7 @@ export default class UsersController {
     const [userByEmail, userByUsername] = await Promise.all([
       User.findBy("email", email),
       User.query()
-        .whereILike("username", username)
+        .whereILike("username", payload.username)
         .first()
     ]);
 
