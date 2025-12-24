@@ -55,7 +55,7 @@ export default class UsersController {
 
     try {
       await User.create({
-        "username": username,
+        "username": payload.username,
         "email": email,
         "nickname": payload.nickname || null,
         "password": payload.password,
