@@ -8,7 +8,7 @@ export default class SessionsController {
      */
   
 
-    async index({}: HttpContext) {}
+    // async index({}: HttpContext) {}
   
     /**
      * Handle form submission for the create action
