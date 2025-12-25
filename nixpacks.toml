@@ -1,0 +1,7 @@
+# 强制指定构建环境
+[setup]
+nixPkgs = ["nodejs_22", "pnpm-9_x", "openssl"]
+
+# 强制安装阶段
+[install]
+cmds = ["pnpm i --frozen-lockfile"]
