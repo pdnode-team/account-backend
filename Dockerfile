@@ -28,6 +28,7 @@ WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
 # 从阶段 4 拷贝编译后的产物
 COPY --from=build /app/build /app
+COPY pdnode.config.json ./
 EXPOSE 3000
 
 # 修正点：AdonisJS 编译后的入口路径
