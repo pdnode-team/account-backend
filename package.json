@@ -13,6 +13,9 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit"
   },
+  "engines": {
+    "node": ">=24"
+  },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
     "#exceptions/*": "./app/exceptions/*.js",
