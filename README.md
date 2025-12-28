@@ -18,6 +18,16 @@ The Pdnode Account is primarily used for Pdnode products, but it can still be ap
 - 2 RAM least
 - Debian >= 12
 - Ubuntu >= 22
+- Postgresql
+
+### Setup Database
+> We only support PostgreSQL. Other databases may work, but MySQL/MariaDB are strictly prohibited!
+
+1. Create database
+2. Create user
+3. Delete public and create account schema
+4. Permissions to create/read (usage) tables based on this user's account schema.
+5. Finish
 
 ### Source code execution
 > For Mac and Linux
@@ -55,3 +65,5 @@ node ./bin/server.js
 ```
 
 ### use Docker
+NA
+let see later
