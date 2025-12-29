@@ -1,0 +1,50 @@
+networks:
+  # 显式新建一个名为 pdnode-network 的网络
+  pdnode-network:
+    driver: bridge
+
+services:
+  # --- PostgreSQL 数据库 ---
+  db:
+    image: postgres:16-alpine
+    container_name: pdnode-db
+    restart: always
+    networks:
+      - pdnode-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: pdnode
+    ports:
+      - "5432:5432" # You can choose not to expose the port if you don't want to.
+    volumes:
+      - ./docker-data/postgres:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    container_name: pdnode-redis
+    restart: always
+    networks:
+      - pdnode-network
+    ports:
+      - "6379:6379" # You can choose not to expose the port if you don't want to.
+    volumes:
+      - ./docker-data/redis:/data
+
+  app:
+    image: ghcr.io/pdnode-team/account-backend:latest
+    container_name: pdnode-app
+    restart: always
+    networks:
+      - pdnode-network
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+      NODE_ENV: production
+    ports:
+        # Host:Container
+      - "${APP_PORT}:${PORT}"
