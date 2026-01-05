@@ -1,17 +1,18 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { createSessionValidator } from '#validators/session'
 import User from '#models/user'
+import env from '#start/env'
 
 export default class SessionsController {
     /**
      * Display a list of resource
      */
-  
+
 
     // async index({}: HttpContext) {}
-  
+
     /**
-     * Handle form submission for the create action
+     * Handle form submission for the creation action
      */
     async store({ request, response }: HttpContext) {
       const data = request.all()
@@ -29,17 +30,23 @@ export default class SessionsController {
       const user = await User.verifyCredentials((email ?? username)!, password)
 
       const token = await User.accessTokens.create(user, ["*"],{expiresIn: payload.rememberMe ? "7 days" : "2 hours"})
-        
+
+      response.cookie("token", token.value, {
+        httpOnly: true,
+        maxAge: payload.rememberMe ? "7 days" : "2 hours",
+        domain: env.get("SESSIONS_SHARE_DOMAIN")
+      })
+
 
       return response.ok({ message: "Session created", status: "s_session_created", token })
 
     }
-  
+
     /**
      * Show individual record
      */
     // async show({ params }: HttpContext) {}
-  
+
     /**
      * Delete record
      */

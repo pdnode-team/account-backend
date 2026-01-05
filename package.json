@@ -1,6 +1,6 @@
 {
   "name": "account-backend",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@adonisjs/auth": "^9.5.1",
-    "@adonisjs/core": "^6.19.1",
+    "@adonisjs/core": "^6.19.2",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/limiter": "^2.4.0",
     "@adonisjs/lucid": "^21.8.1",
@@ -71,6 +71,7 @@
     "pg": "^8.16.3",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.2.2",
+    "smol-toml": "^1.6.0",
     "uuid": "^13.0.0"
   },
   "hotHook": {

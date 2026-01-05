@@ -28,8 +28,8 @@ WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
 # 从阶段 4 拷贝编译后的产物
 COPY --from=build /app/build /app
-COPY pdnode.config.json ./
+COPY pdnode.config.toml ./
 EXPOSE 3000
 
-# 修正点：AdonisJS 编译后的入口路径
-CMD ["node", "bin/server.js"]
+# 不再通过dockerfile，而是docker-compose.yml
+# CMD ["node", "bin/server.js"]

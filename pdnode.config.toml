@@ -1,6 +1,16 @@
-{
-  "banned": {
-    "username": [
+
+
+#[server]
+#port = 3000 # NA - Please use HOST env variable to set host binding
+#host = "0.0.0.0" # NA - Please use HOST env variable to set host binding
+
+################################################
+#                    Priority                  #
+# Env variables > Config File > Default values #
+################################################
+
+[banned]
+username = [
       "admin",
       "administrator",
       "mod",
@@ -16,13 +26,12 @@
       "username",
       "official",
       "support"
-    ],
-    "nickname": [
+]
+
+nickname = [
       "管理员", "官方", "系统", "客服", "站长",
       "色情", "黄色", "操", "屌", "性爱",
       "毒品", "枪支", "赌博", "诈骗", "转账", "加微信", "QQ群", "支付宝",
       "av", "gv", "wcnm", "cnm", "nazi",
       "phone", "email", "tel", "qq", "wechat"
-    ]
-  }
-}
+]

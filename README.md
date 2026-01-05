@@ -1,7 +1,10 @@
 # Pdnode Account Backend
+> Pdnode assumes no responsibility for any data loss, when you use unstable version
 The Pdnode Account is primarily used for Pdnode products, but it can still be applied to other products after modifications.
 
 ## Install
+>  Since the version is not yet v0.1.0, the installation tutorial may contain errors! If you encounter any installation errors, please contact us through the [Discord server](https://discord.com/invite/7AabPTt2dX)!
+
 ### Prerequisites
 **Symbol Explanation**
 - `* = Source code installation only`
@@ -57,6 +60,7 @@ Install production item dependencies
 ```bash
 cd build
 pnpm i --prod
+node ace migration:run
 ```
 
 Running API server
@@ -65,5 +69,18 @@ node ./bin/server.js
 ```
 
 ### use Docker
-NA
-let see later
+> We now support Docker!
+
+Prerequisites: Docker Engine
+
+edit .env
+```
+nano .env
+```
+> Please check the docker-compose.yml file to ensure all variables are set correctly.
+
+start
+```
+docker compose up -d
+```
+> The docker-compose .yml file may contain inaccuracies; please review it carefully.

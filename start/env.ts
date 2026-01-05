@@ -42,7 +42,12 @@ export default await Env.create(new URL("../", import.meta.url), {
   | Variables for configuring the mail package
   |----------------------------------------------------------
   */
-  RESEND_API_KEY: Env.schema.string(),
+  SMTP_ADDRESS: Env.schema.string(),
+  SMTP_NAME: Env.schema.string(),
+  SMTP_HOST: Env.schema.string(),
+  SMTP_PORT: Env.schema.number(),
+  SMTP_USER: Env.schema.string(),
+  SMTP_PASS: Env.schema.string(),
 
   /*
   |----------------------------------------------------------
@@ -53,9 +58,7 @@ export default await Env.create(new URL("../", import.meta.url), {
 
   APP_URL: Env.schema.string(),
 
-  ROOT_DOMAIN: Env.schema.string(),
-
-  SESSION_ALLOW_CROSS_SUBDOMAIN: Env.schema.boolean(),
+  SESSIONS_SHARE_DOMAIN: Env.schema.string(),
 
   REDIS_HOST: Env.schema.string({ format: 'host' }),
   REDIS_PORT: Env.schema.number(),
