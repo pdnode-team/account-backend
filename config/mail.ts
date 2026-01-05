@@ -23,13 +23,13 @@ const mailConfig = defineConfig({
         pass: env.get('SMTP_PASS')
       },
 
-      // TODO: Add security options to environment variables.
+      //  TODO: Add security options to environment variables.
 
       tls: {},
 
       ignoreTLS: false,
-      requireTLS: false,
-      secure: false,
+      requireTLS: env.get("SMTP_SECURE") === "tls",
+      secure: env.get("SMTP_SECURE") === "ssl",
 
     }),
   },
