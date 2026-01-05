@@ -17,8 +17,22 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            # 1. 无论什么标签，都打上原始标签名（如 v0.2.0-alpha.1）
+            type=raw,value=${{ github.ref_name }}
+            # 2. 只有当 Git Tag 符合纯版本号格式时（如 v1.0.0），才更新 latest
+            # 如果包含 -alpha, -beta 等后缀，此项会自动跳过 latest 的生成
+            type=semver,pattern={{version}},enable=${{ !contains(github.ref_name, '-') }}
+
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          # 使用 meta 生成的动态标签列表
+          tags: ${{ steps.meta.outputs.tags }}
