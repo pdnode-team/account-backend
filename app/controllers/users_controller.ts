@@ -3,7 +3,7 @@ import User from "#models/user";
 import { registerUserValidator } from "#validators/user";
 import logger from "@adonisjs/core/services/logger";
 import redis from "@adonisjs/redis/services/main";
-import { config } from "#start/kernel";
+import { config } from '#start/pdnode'
 
 export default class UsersController {
   /**
@@ -11,12 +11,12 @@ export default class UsersController {
    */
 
   /* -- TODO --
-  * 
+  * NULL
   */
-  async index({}: HttpContext) {}
+  // async index({}: HttpContext) {}
 
   /**
-   * Handle form submission for the create action
+   * Handle form submission for the creation action
    */
   async store({ request, response }: HttpContext) {
     const data = request.all();
@@ -29,11 +29,11 @@ export default class UsersController {
 
     const email = payload.email.toLowerCase();
     // const username = payload.username.toLowerCase();
-    
+
 
     const storedCodeString = await redis.get(`user.email.code:${email}`)
     const storedCode = storedCodeString ? Number(storedCodeString) : null
-    
+
     // 检查验证码是否为空或不匹配
     if (storedCode === null || payload.emailCode !== storedCode) {
       return response.badRequest({ status: 'e_wrong_email_code' })
@@ -61,7 +61,7 @@ export default class UsersController {
         "password": payload.password,
       });
       redis.del(`user.email.code:${email}`);
-      
+
 
     } catch (e: unknown) {
       logger.error(

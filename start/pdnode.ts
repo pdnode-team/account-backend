@@ -10,13 +10,14 @@ interface PdnodeConfig{
 
 export let config: PdnodeConfig
 
-readFile("pdnode.config.json", "utf8", (err, data) => {
+readFile("pdnode.config.toml", "utf8", (err, data) => {
   if(err){
     console.log("Read Config File Failed: " + err)
   }
   try {
-      config = parse(data) as unknown as PdnodeConfig;;
+      config = parse(data) as unknown as PdnodeConfig;
     } catch (parseError) {
-      throw  console.error("Paese Config File Failed, Error: ", parseError);
+      console.error("Parse Config File Failed, Error: ", parseError);
+      throw new Error(`Parse Config File Failed: ${parseError.message}`);
     }
 })
