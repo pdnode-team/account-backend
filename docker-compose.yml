@@ -54,6 +54,6 @@ services:
     ports:
         # if you want, you can change the number
         # Host:Container
-      - 3333:${PORT}"
+      - 3333:${PORT}
     command: >
       sh -c "node ace migration:run --force && node bin/server.js"
