@@ -31,5 +31,5 @@ COPY --from=build /app/build /app
 COPY pdnode.config.toml ./
 EXPOSE 3000
 
-# 修正点：AdonisJS 编译后的入口路径
-CMD ["node", "bin/server.js"]
+# 不再通过dockerfile，而是docker-compose.yml
+# CMD ["node", "bin/server.js"]

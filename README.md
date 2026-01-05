@@ -60,6 +60,7 @@ Install production item dependencies
 ```bash
 cd build
 pnpm i --prod
+node ace migration:run
 ```
 
 Running API server
