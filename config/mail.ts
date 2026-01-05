@@ -23,7 +23,6 @@ const mailConfig = defineConfig({
         pass: env.get('SMTP_PASS')
       },
 
-      //  TODO: Add security options to environment variables.
 
       tls: {},
 
