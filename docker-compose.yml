@@ -11,22 +11,22 @@ services:
     restart: always
     networks:
       - pdnode-network
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: pdnode
+    env_file:
+      - .env
     ports:
       - "5432:5432" # You can choose not to expose the port if you don't want to.
     volumes:
       - ./docker-data/postgres:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d pdnode" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_DATABASE}" ]
       interval: 5s
       timeout: 5s
   redis:
     image: redis:7-alpine
     container_name: pdnode-redis
     restart: always
+    env_file:
+      - .env
     networks:
       - pdnode-network
     ports:
@@ -52,7 +52,8 @@ services:
       REDIS_HOST: redis
       NODE_ENV: production
     ports:
+        # if you want, you can change the number
         # Host:Container
-      - "${APP_PORT}:${PORT}"
+      - 3333:${PORT}"
     command: >
       sh -c "node ace migration:run --force && node bin/server.js"

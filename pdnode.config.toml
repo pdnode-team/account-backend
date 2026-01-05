@@ -1,8 +1,8 @@
 
 
 #[server]
-#port = 3000 // NA - Please use HOST env variable to set host binding
-#host = "0.0.0.0" // NA - Please use HOST env variable to set host binding
+#port = 3000 # NA - Please use HOST env variable to set host binding
+#host = "0.0.0.0" # NA - Please use HOST env variable to set host binding
 
 ################################################
 #                    Priority                  #

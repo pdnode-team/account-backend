@@ -31,10 +31,10 @@ export default class SessionsController {
 
       const token = await User.accessTokens.create(user, ["*"],{expiresIn: payload.rememberMe ? "7 days" : "2 hours"})
 
-      response.cookie("token", token, {
+      response.cookie("token", token.value, {
         httpOnly: true,
         maxAge: payload.rememberMe ? "7 days" : "2 hours",
-        domain: env.get("ROOT_DOMAIN")
+        domain: env.get("SESSIONS_SHARE_DOMAIN")
       })
 
 
