@@ -38,7 +38,7 @@ export default class SessionsController {
       })
 
 
-      return response.ok({ message: "Session created", status: "s_session_created", token })
+      return response.ok({ message: "Session created", status: "s_session_created", session: token })
 
     }
 
