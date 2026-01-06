@@ -12,7 +12,8 @@ import router from "@adonisjs/core/services/router";
 import { sendEmailCodeThrottle, registerThrottle, loginThrottle } from '#start/limiter'
 import UsersController from "#controllers/users_controller";
 import SessionsController from "#controllers/sessions_controller";
-// import { middleware } from '#start/kernel'
+import MeController from "#controllers/me_controller";
+import { middleware } from '#start/kernel'
 
 
 
@@ -22,6 +23,23 @@ router.get("/", async () => {
   };
 });
 
-router.post("/email/send", [AuthController, "sendEmailCode"]).use(sendEmailCodeThrottle);
-router.post("/register", [UsersController, "store"]).use(registerThrottle)  
-router.post("/sessions", [SessionsController, "store"]).use(loginThrottle)
+
+// Guest
+router.group(() => {
+  router.post("/sessions", [SessionsController, "store"]).use(loginThrottle)
+  router.post("/users", [UsersController, "store"]).use(registerThrottle)
+})
+
+// Guest & User
+router.group(() => {
+  router.post("/email/send", [AuthController, "sendEmailCode"]).use(sendEmailCodeThrottle);
+})
+
+// User
+router.group(() => {
+  router.get("/", [MeController, "show"])
+  router.put("/email", [MeController, "updateEmail"])
+}).use(middleware.auth()).prefix("/me")
+
+
+// Admin
