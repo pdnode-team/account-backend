@@ -39,6 +39,8 @@ router.group(() => {
 router.group(() => {
   router.get("/", [MeController, "show"])
   router.put("/email", [MeController, "updateEmail"])
+  router.put("/password", [MeController, "updatePassword"])
+  router.put("/username", [MeController, "updateUsername"])
 }).use(middleware.auth()).prefix("/me")
 
 

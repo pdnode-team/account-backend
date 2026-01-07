@@ -11,7 +11,7 @@ type RegistrationMeta = {
   bannedNicknames: string[]
 }
 
-const isBannedRule = vine.createRule(
+export const isBannedRule = vine.createRule(
   (
     value: unknown,
     options: { type: "username" | "nickname" },
@@ -37,6 +37,7 @@ const isBannedRule = vine.createRule(
     if (hasBadWord) {
       field.report(
         `${options.type === "username" ? "Username" : "Nickname"} contains prohibited words.`,
+        // TODO: Add to APP_STATUS_CODE
         `e_bad_${options.type}`,
         field,
       );
