@@ -3,7 +3,7 @@ import User from '#models/user'
 import { registerUserValidator } from '#validators/user'
 import logger from '@adonisjs/core/services/logger'
 import redis from '@adonisjs/redis/services/main'
-import { config } from '#start/pdnode'
+import { APP_STATUS_CODE, config } from '#start/pdnode'
 
 export default class UsersController {
   /**
@@ -32,7 +32,7 @@ export default class UsersController {
 
     // 检查验证码是否为空或不匹配
     if (storedCode === null || payload.emailCode !== storedCode) {
-      return response.badRequest({ status: 'e_wrong_email_code' })
+      return response.badRequest({ status: APP_STATUS_CODE.E_WRONG_EMAIL_CODE })
     }
 
     const [userByEmail, userByUsername] = await Promise.all([
@@ -41,7 +41,7 @@ export default class UsersController {
     ])
 
     if (userByEmail || userByUsername) {
-      return response.badRequest({ status: 'e_username_or_email_existing' })
+      return response.badRequest({ status: APP_STATUS_CODE.E_USERNAME_OR_EMAIL_EXISTING })
     }
 
     try {
@@ -58,11 +58,11 @@ export default class UsersController {
       )
       return response.internalServerError({
         msg: 'An error occurred while creating the user',
-        status: 'e_create_user_failed',
+        status: APP_STATUS_CODE.FAILED,
       })
     }
 
-    return response.created({ status: 's_user_created' })
+    return response.created({ status: APP_STATUS_CODE.SUCCESS })
   }
 
   /**

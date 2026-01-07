@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { createSessionValidator } from '#validators/session'
 import User from '#models/user'
 import env from '#start/env'
+import { APP_STATUS_CODE } from '#start/pdnode'
 
 export default class SessionsController {
     /**
@@ -22,9 +23,9 @@ export default class SessionsController {
       const password = payload.password
 
       if (!email && !username) {
-        return response.badRequest({ message: "Either email or username must be provided.", status: "e_missing_identifier" })
+        return response.badRequest({ message: "Either email or username must be provided.", status: APP_STATUS_CODE.E_MISSING_IDENTIFIER })
       } else if (email && username) {
-        return response.badRequest({ message: "Provide either email or username, not both.", status: "e_multiple_identifiers" })
+        return response.badRequest({ message: "Provide either email or username, not both.", status: APP_STATUS_CODE.E_MULTIPLE_IDENTIFIERS })
       }
 
       const user = await User.verifyCredentials((email ?? username)!, password)
@@ -38,7 +39,7 @@ export default class SessionsController {
       })
 
 
-      return response.ok({ message: "Session created", status: "s_session_created", session: token })
+      return response.ok({ message: "Session created", status: APP_STATUS_CODE.SUCCESS, session: token })
 
     }
 

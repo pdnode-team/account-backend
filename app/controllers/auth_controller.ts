@@ -4,6 +4,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import mail from '@adonisjs/mail/services/main'
 import redis from '@adonisjs/redis/services/main'
 import logger from '@adonisjs/core/services/logger'
+import { APP_STATUS_CODE } from '#start/pdnode'
 
 export default class AuthController {
   async sendEmailCode({ request, response, auth }: HttpContext) {
@@ -14,19 +15,19 @@ export default class AuthController {
     if (payload.type === 'verifyEmail') {
       const existingUser = await User.findBy('email', payload.email)
       if (existingUser) {
-        return response.conflict({ status: 'e_email_already_register' })
+        return response.conflict({ status: APP_STATUS_CODE.E_EMAIL_ALREADY_REGISTER })
       }
     }else if (payload.type === 'updateEmail') { // 为了表达清楚，在这里重新写一遍，其实可以和验证邮箱一起写的
       await auth.authenticate()
       if (auth.user!.email !== payload.email) {
-        return response.forbidden({ status: 'e_not_your_email' })
+        return response.forbidden({ status: APP_STATUS_CODE.E_NOT_YOUR_EMAIL })
       }
     }
 
     // 2. 频率限制检查：检查该邮箱是否在 1 分钟内已经发过（防止滥用）
     const lastSent = await redis.get(`user.email.last_sent:${payload.email}`)
     if (lastSent) {
-      return response.tooManyRequests({ status: 'e_email_send_too_fast' })
+      return response.tooManyRequests({ status: APP_STATUS_CODE.E_TOO_FAST })
     }
 
     // 3. 生成验证码
@@ -56,9 +57,9 @@ export default class AuthController {
       logger.error(error)
       // 如果邮件发送失败，清理 Redis
       await redis.del(redisKey)
-      return response.internalServerError({ status: 'e_email_send_failed' })
+      return response.internalServerError({ status: APP_STATUS_CODE.FAILED })
     }
 
-    return response.ok({ status: 's_email_send' })
+    return response.ok({ status: APP_STATUS_CODE.SUCCESS })
   }
 }
